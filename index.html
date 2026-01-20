@@ -104,6 +104,17 @@
             font-size: 1.2em;
         }
 
+        .sidebar-unit {
+            padding: 12px 8px;
+            margin: 15px 0 8px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9em;
+            border-left: 4px solid #764ba2;
+        }
+
         .sidebar-item {
             padding: 12px;
             margin: 8px 0;
@@ -133,6 +144,28 @@
             padding: 30px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             min-height: 500px;
+        }
+
+        .unit-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 40px 0 30px 0;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        }
+
+        .unit-header h1 {
+            color: white;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .unit-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.05em;
+            margin: 0;
         }
 
         .content-section {
@@ -456,7 +489,7 @@
     <div class="container">
         <header>
             <h1>📚 Engineering Optimization Study Guide</h1>
-            <p>A Comprehensive Resource Based on "Engineering Optimization: Theory and Practice" by Singiresu S. Rao</p>
+            <p>Unit-wise Comprehensive Resource Based on "Engineering Optimization: Theory and Practice" by Singiresu S. Rao</p>
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="Search topics, keywords...">
                 <button onclick="searchContent()">Search</button>
@@ -465,8 +498,13 @@
 
         <div class="main-grid">
             <div class="sidebar">
-                <h3>📖 Topics</h3>
+                <h3>📖 Units & Topics</h3>
+                
+                <!-- Introduction -->
                 <div class="sidebar-item active" onclick="showSection('intro')">🎯 Introduction</div>
+                
+                <!-- Unit 1 -->
+                <div class="sidebar-unit">📚 Unit 1: Fundamentals</div>
                 <div class="sidebar-item" onclick="showSection('statement')">📝 Statement of Problem</div>
                 <div class="sidebar-item" onclick="showSection('design-vector')">🎛️ Design Vector</div>
                 <div class="sidebar-item" onclick="showSection('design-constraints')">🔒 Design Constraints</div>
@@ -474,9 +512,12 @@
                 <div class="sidebar-item" onclick="showSection('objective-function')">🎯 Objective Function</div>
                 <div class="sidebar-item" onclick="showSection('obj-surfaces')">🗻 Obj. Function Surfaces</div>
                 <div class="sidebar-item" onclick="showSection('classification')">📋 Classification</div>
+                
+                <!-- Unit 2 -->
+                <div class="sidebar-unit">📚 Unit 2: Methods & Optimization</div>
                 <div class="sidebar-item" onclick="showSection('single-var')">📈 Single-Variable Opt.</div>
-                <div class="sidebar-item" onclick="showSection('necessary-sufficient')">✅ Necessary & Sufficient</div>
                 <div class="sidebar-item" onclick="showSection('multivariable-unc')">🔢 Multivariable Unconstrained</div>
+                <div class="sidebar-item" onclick="showSection('necessary-sufficient')">✅ Necessary & Sufficient</div>
                 <div class="sidebar-item" onclick="showSection('multivariable-eq')">⚖️ Multivariable with Equality</div>
                 <div class="sidebar-item" onclick="showSection('lagrange')">🔗 Lagrange Multipliers</div>
                 <div class="sidebar-item" onclick="showSection('multivariable-ineq')">⛔ Multivariable with Inequality</div>
@@ -522,6 +563,12 @@
                     <div class="image-gallery" id="intro-images">
                         <!-- Images will be inserted here if available -->
                     </div>
+                </div>
+
+                <!-- UNIT 1: FUNDAMENTALS -->
+                <div class="unit-header">
+                    <h1>📚 UNIT 1: Fundamentals of Optimization</h1>
+                    <p>Understanding the core concepts, problem formulation, constraints, and objective functions</p>
                 </div>
 
                 <!-- Statement of Problem Section -->
@@ -1088,6 +1135,12 @@ Trajectory Optimization:
                     </div>
 
                     <div class="image-gallery" id="classification-images"></div>
+                </div>
+
+                <!-- UNIT 2: METHODS & OPTIMIZATION TECHNIQUES -->
+                <div class="unit-header">
+                    <h1>📚 UNIT 2: Methods & Optimization Techniques</h1>
+                    <p>Single-variable and multivariable optimization methods with equality and inequality constraints</p>
                 </div>
 
                 <!-- Single-Variable Optimization Section -->
