@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Optimization Study Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .search-box {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-box button {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .search-box button:hover {
+            background: #764ba2;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .sidebar h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .sidebar-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-left: 4px solid transparent;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.95em;
+        }
+
+        .sidebar-item:hover {
+            background: #e9ecef;
+            border-left-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .sidebar-item.active {
+            background: #667eea;
+            color: white;
+            border-left-color: #764ba2;
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            min-height: 500px;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .content-section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .content-section h3 {
+            color: #764ba2;
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+
+        .content-section h4 {
+            color: #555;
+            font-size: 1.1em;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .content-section p {
+            margin-bottom: 12px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .content-section ul, .content-section ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        .content-section li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .formula-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            line-height: 1.8;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .danger-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .image-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+        }
+
+        .image-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            background: white;
+            padding: 10px;
+        }
+
+        .image-item p {
+            padding: 12px;
+            font-size: 0.95em;
+            text-align: center;
+            color: #667eea;
+            font-weight: 500;
+            background: #f0f4ff;
+        }
+
+        /* Inline Image Styling */
+        .inline-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .inline-gallery-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .inline-gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .inline-gallery-item img {
+            width: 100%;
+            height: 280px;
+            object-fit: contain;
+            background: white;
+            padding: 10px;
+        }
+
+        .inline-gallery-item p {
+            padding: 12px;
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+            background: #f0f4ff;
+            font-weight: 500;
+        }
+
+        .image-explanation {
+            padding: 15px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 6px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            color: #666;
+        }
+
+        .tab-button:hover {
+            background: #e9ecef;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .key-term {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .footer {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .back-to-top:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Engineering Optimization Study Guide</h1>
+            <p>A Comprehensive Resource Based on "Engineering Optimization: Theory and Practice" by Singiresu S. Rao</p>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search topics, keywords...">
+                <button onclick="searchContent()">Search</button>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <div class="sidebar">
+                <h3>📖 Topics</h3>
+                <div class="sidebar-item active" onclick="showSection('intro')">🎯 Introduction</div>
+                <div class="sidebar-item" onclick="showSection('statement')">📝 Statement of Problem</div>
+                <div class="sidebar-item" onclick="showSection('design-vector')">🎛️ Design Vector</div>
+                <div class="sidebar-item" onclick="showSection('design-constraints')">🔒 Design Constraints</div>
+                <div class="sidebar-item" onclick="showSection('constraint-surface')">📊 Constraint Surface</div>
+                <div class="sidebar-item" onclick="showSection('objective-function')">🎯 Objective Function</div>
+                <div class="sidebar-item" onclick="showSection('obj-surfaces')">🗻 Obj. Function Surfaces</div>
+                <div class="sidebar-item" onclick="showSection('classification')">📋 Classification</div>
+                <div class="sidebar-item" onclick="showSection('single-var')">📈 Single-Variable Opt.</div>
+                <div class="sidebar-item" onclick="showSection('necessary-sufficient')">✅ Necessary & Sufficient</div>
+                <div class="sidebar-item" onclick="showSection('multivariable-unc')">🔢 Multivariable Unconstrained</div>
+                <div class="sidebar-item" onclick="showSection('multivariable-eq')">⚖️ Multivariable with Equality</div>
+                <div class="sidebar-item" onclick="showSection('lagrange')">🔗 Lagrange Multipliers</div>
+                <div class="sidebar-item" onclick="showSection('multivariable-ineq')">⛔ Multivariable with Inequality</div>
+                <div class="sidebar-item" onclick="showSection('kuhn-tucker')">🎯 Kuhn-Tucker Conditions</div>
+            </div>
+
+            <div class="content-area">
+                <!-- Introduction Section -->
+                <div id="intro" class="content-section active">
+                    <h2>🎯 Introduction to Engineering Optimization</h2>
+                    <p>Welcome to this comprehensive study guide on engineering optimization! This resource is based on the foundational textbook "Engineering Optimization: Theory and Practice" by Singiresu S. Rao.</p>
+                    
+                    <h3>What is Optimization?</h3>
+                    <p><span class="key-term">Optimization</span> is the scientific process of finding the best possible solution to a problem given a set of constraints. In engineering, this means:</p>
+                    <ul>
+                        <li>Minimizing costs, weight, or energy consumption</li>
+                        <li>Maximizing efficiency, profit, or strength</li>
+                        <li>Finding the optimal balance between conflicting objectives</li>
+                    </ul>
+
+                    <h3>Why Study Optimization?</h3>
+                    <ul>
+                        <li>🏗️ <strong>Civil Engineering:</strong> Design cost-effective, safe structures</li>
+                        <li>✈️ <strong>Aerospace:</strong> Minimize weight while maintaining strength</li>
+                        <li>⚙️ <strong>Mechanical:</strong> Maximize efficiency of machines</li>
+                        <li>🔌 <strong>Electrical:</strong> Optimize power distribution networks</li>
+                        <li>💼 <strong>Operations:</strong> Allocate resources efficiently</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <strong>📌 Key Principle:</strong> The maximum of a function f(X) occurs at the same location as the minimum of -f(X). This equivalence allows us to use minimization algorithms for all optimization problems.
+                    </div>
+
+                    <h3>Course Structure</h3>
+                    <p>This guide covers:</p>
+                    <ol>
+                        <li><strong>Problem Formulation:</strong> How to translate engineering problems into mathematical models</li>
+                        <li><strong>Classical Methods:</strong> Analytical techniques using calculus</li>
+                        <li><strong>Constraints:</strong> Handling limitations and restrictions</li>
+                        <li><strong>Advanced Topics:</strong> Numerical methods for complex problems</li>
+                    </ol>
+
+                    <div class="image-gallery" id="intro-images">
+                        <!-- Images will be inserted here if available -->
+                    </div>
+                </div>
+
+                <!-- Statement of Problem Section -->
+                <div id="statement" class="content-section">
+                    <h2>📝 Statement of an Optimization Problem</h2>
+                    <p>Every optimization problem begins with a clear mathematical statement. Understanding how to formulate a problem is the most critical step in the optimization process.</p>
+
+                    <h3>The Standard Mathematical Form</h3>
+                    <div class="formula-box">
+Find X = {x₁, x₂, ..., xₙ}ᵀ which minimizes f(X)
+
+Subject to:
+- Inequality Constraints: gⱼ(X) ≤ 0,  j = 1, 2, ..., m
+- Equality Constraints: lⱼ(X) = 0,  j = 1, 2, ..., p
+                    </div>
+
+                    <h3>Key Components</h3>
+                    <table>
+                        <tr>
+                            <th>Component</th>
+                            <th>Definition</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Design Vector (X)</strong></td>
+                            <td>Variables we can change to optimize</td>
+                            <td>Beam thickness, diameter, width</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Objective Function f(X)</strong></td>
+                            <td>What we want to minimize or maximize</td>
+                            <td>Cost, weight, stress</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constraints g(X), l(X)</strong></td>
+                            <td>Limitations and requirements</td>
+                            <td>Stress ≤ yield strength</td>
+                        </tr>
+                    </table>
+
+                    <h3>Equivalence of Minimization and Maximization</h3>
+                    <div class="success-box">
+                        <strong>Key Theorem:</strong><br>
+                        Maximize f(X) ≡ Minimize -f(X)<br><br>
+                        This means any maximization problem can be converted to a minimization problem by negating the objective function. This allows us to use a single set of algorithms for all problems.
+                    </div>
+
+                    <h3>Visualizing the Design Space</h3>
+                    <p>Understanding how design problems are structured is crucial. The images below show the relationship between design variables, constraints, and the objective function:</p>
+                    <div class="inline-gallery" id="statement-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>🔍 What These Images Show:</strong> The visualizations illustrate how design variables create a searchable space, how constraints form boundaries that define feasible designs, and how the objective function landscape guides us toward optimal solutions. The black dots represent feasible designs; red circles show unconstrained optima; green marks show constrained optima.
+                    </div>
+
+                    <h3>Example: Tubular Column Design</h3>
+                    <p><strong>Problem:</strong> Design a tubular column to support a compressive load of 2500 kg-force while minimizing cost.</p>
+                    <ul>
+                        <li><strong>Design Variables:</strong> Mean diameter (d) and wall thickness (t)</li>
+                        <li><strong>Objective:</strong> Minimize Cost = 5W + 2d (where W is weight)</li>
+                        <li><strong>Constraints:</strong> Induced stress ≤ yield stress, buckling limits, manufacturing bounds</li>
+                    </ul>
+                </div>
+
+                <!-- Design Vector Section -->
+                <div id="design-vector" class="content-section">
+                    <h2>🎛️ The Design Vector</h2>
+                    <p>The design vector is the mathematical representation of all the choices an engineer can make. It is the "DNA" of the design.</p>
+
+                    <h3>Design Variables vs. Preassigned Parameters</h3>
+                    <div class="info-box">
+                        <strong>Design Variables (x₁, x₂, ...):</strong> Quantities the engineer can change to optimize performance. These go INTO the design vector.<br><br>
+                        <strong>Preassigned Parameters:</strong> Fixed quantities like material properties, safety factors, or prescribed dimensions. These stay OUTSIDE the design vector.
+                    </div>
+
+                    <h3>The Design Space</h3>
+                    <p>When we have n design variables, we create an n-dimensional Cartesian coordinate system called the <span class="key-term">Design Space</span>. Each point in this space represents one complete design option:</p>
+                    <ul>
+                        <li>1 variable → 1D Design Space (a line)</li>
+                        <li>2 variables → 2D Design Space (a plane)</li>
+                        <li>3 variables → 3D Design Space (a volume)</li>
+                        <li>n variables → n-D Design Space (a hyperspace)</li>
+                    </ul>
+
+                    <h3>Design Space Visualization</h3>
+                    <p>The images below illustrate how design spaces are created and how designs are represented as points within these spaces:</p>
+                    <div class="inline-gallery" id="design-vector-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>📊 Understanding Design Space:</strong> A point in design space represents one complete design. For example, in a 2D design space (x₁, x₂), each point represents a unique configuration. All possible designs fill the entire space; feasible designs lie within specific regions defined by constraints. The optimal design is the best point within the feasible region.
+                    </div>
+
+                    <h3>Real-World Example: Gear Pair Design</h3>
+                    <p>To design a gear pair, we need:</p>
+                    <ul>
+                        <li>Number of teeth on pinion (T₁)</li>
+                        <li>Number of teeth on gear (T₂)</li>
+                        <li>Face width (b)</li>
+                        <li>Center distance (d) - FIXED</li>
+                        <li>Pressure angle (ψ) - FIXED</li>
+                        <li>Material - FIXED</li>
+                    </ul>
+                    <p><strong>Design Vector:</strong> X = {T₁, T₂, b}ᵀ (only the changeable elements)</p>
+
+                    <h3>Classification of Variables</h3>
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Definition</th>
+                            <th>Examples</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Continuous</strong></td>
+                            <td>Can take any real value</td>
+                            <td>Length, temperature, pressure</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Discrete</strong></td>
+                            <td>Only specific values allowed</td>
+                            <td>Standard sizes, pipe diameters</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Integer</strong></td>
+                            <td>Must be whole numbers</td>
+                            <td>Number of teeth, rivets, columns</td>
+                        </tr>
+                    </table>
+
+                    <div class="highlight-box">
+                        <strong>💡 Best Practice:</strong> Keep the number of variables as small as possible (curse of dimensionality). Only include variables that genuinely affect the design objective.
+                    </div>
+
+                    <div class="image-gallery" id="design-vector-images"></div>
+                </div>
+
+                <!-- Design Constraints Section -->
+                <div id="design-constraints" class="content-section">
+                    <h2>🔒 Design Constraints</h2>
+                    <p>Constraints are the limitations that define which designs are acceptable. They transform an unconstrained problem (where optimal solution is often trivial: zero size, minimum/maximum everything) into a realistic engineering problem.</p>
+
+                    <h3>Two Types of Constraints</h3>
+
+                    <h4>1. Behavior (Functional) Constraints</h4>
+                    <p>These limit the <strong>performance</strong> or response of the system under load or operation.</p>
+                    <div class="formula-box">
+Examples:
+- Stress induced ≤ Material yield strength
+- Deflection ≤ Maximum allowable deflection  
+- Temperature ≤ Material melting point
+- Natural frequency > Operating frequency (avoid resonance)
+                    </div>
+
+                    <h4>2. Geometric (Side) Constraints</h4>
+                    <p>These limit the variables themselves, based on manufacturing, availability, or space limitations.</p>
+                    <div class="formula-box">
+Examples:
+- 10 mm ≤ Shaft diameter ≤ 50 mm (available chuck sizes)
+- Fuel tank length ≤ Fuselage length (space envelope)
+- Number of teeth must be an integer
+- All dimensions must be positive
+                    </div>
+
+                    <h3>Mathematical Formulation</h3>
+                    <table>
+                        <tr>
+                            <th>Constraint Type</th>
+                            <th>Standard Form</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Inequality</strong></td>
+                            <td>gⱼ(X) ≤ 0</td>
+                            <td>Most common; defines a feasible region (one side of a boundary)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Equality</strong></td>
+                            <td>hⱼ(X) = 0</td>
+                            <td>Design must satisfy exact relationships (e.g., force balance)</td>
+                        </tr>
+                    </table>
+
+                    <h3>The Feasible Region</h3>
+                    <p>The set of all points where <strong>all constraints are satisfied</strong> is called the <span class="key-term">Feasible Region</span>. Visual understanding is critical:</p>
+                    <ul>
+                        <li><strong>Feasible Point:</strong> g(X) ≤ 0 (inside or on the boundary)</li>
+                        <li><strong>Infeasible Point:</strong> g(X) > 0 (outside the boundary, violates constraint)</li>
+                    </ul>
+
+                    <div class="inline-gallery" id="constraints-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>📍 Constraint Visualization:</strong> The yellow shaded area represents the feasible region. The boundary line shows where g(X) = 0. Points above the line (where g(X) > 0) are infeasible—designs that cannot be used. Points on or below the line satisfy the constraint. Multiple constraints intersect to form a polygon or polyhedron as the overall feasible region.
+                    </div>
+
+                    <h3>Active vs. Inactive Constraints</h3>
+                    <div class="info-box">
+                        <strong>Active Constraint:</strong> g(X*) = 0 (the design point sits exactly on the limit)<br><br>
+                        <strong>Inactive Constraint:</strong> g(X*) < 0 (the design point is safely inside the limit)<br><br>
+                        At the optimal solution, we focus on the active constraints—they are the "bottlenecks" limiting further improvement.
+                    </div>
+
+                    <div class="image-gallery" id="constraints-images"></div>
+                </div>
+
+                <!-- Constraint Surface Section -->
+                <div id="constraint-surface" class="content-section">
+                    <h2>📊 Constraint Surfaces</h2>
+                    <p>A constraint surface is the geometric boundary in the design space that separates feasible designs from infeasible ones.</p>
+
+                    <h3>Mathematical Definition</h3>
+                    <p>For the inequality constraint gⱼ(X) ≤ 0, the <span class="key-term">constraint surface</span> is the set of points satisfying:</p>
+                    <div class="formula-box">
+gⱼ(X) = 0  (the boundary)
+                    </div>
+
+                    <h3>Dimensionality</h3>
+                    <ul>
+                        <li><strong>1-variable problem:</strong> Constraint surface is a point</li>
+                        <li><strong>2-variable problem:</strong> Constraint surface is a line or curve</li>
+                        <li><strong>3-variable problem:</strong> Constraint surface is a plane or curved surface</li>
+                        <li><strong>n-variable problem:</strong> Constraint surface is an (n-1)-dimensional hypersurface</li>
+                    </ul>
+
+                    <h3>Composite Constraint Surface</h3>
+                    <p>Real problems have multiple constraints. The <strong>Composite Constraint Surface</strong> is the collection of all individual constraint surfaces.</p>
+                    <p>The <strong>Feasible Region</strong> is the intersection of all individual feasible regions (where ALL constraints are satisfied).</p>
+
+                    <h3>Classification of Design Points</h3>
+                    <table>
+                        <tr>
+                            <th>Point Type</th>
+                            <th>Criteria</th>
+                            <th>Meaning</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Free & Feasible</strong></td>
+                            <td>All gⱼ < 0 (no constraint touches)</td>
+                            <td>Safe design, not pushing limits</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bound & Feasible</strong></td>
+                            <td>Some gⱼ = 0, others ≤ 0</td>
+                            <td><strong>Usually the optimum!</strong> Design is pushing limits.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bound & Infeasible</strong></td>
+                            <td>gⱼ = 0 for some, gₖ > 0 for others</td>
+                            <td>Design barely fails one constraint</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Free & Infeasible</strong></td>
+                            <td>Some gⱼ > 0</td>
+                            <td>Failed design, not at a limit</td>
+                        </tr>
+                    </table>
+
+                    <h3>Graphical Optimization (2D Example)</h3>
+                    <p>In a 2-variable problem, the optimization process can be visualized as:</p>
+                    <ol>
+                        <li>Plot the constraint boundaries (curves of gⱼ = 0)</li>
+                        <li>Shade the feasible region (where all gⱼ ≤ 0)</li>
+                        <li>Draw contours of the objective function f(X) = constant</li>
+                        <li>Find the contour with the lowest value that touches the feasible region</li>
+                        <li>The touching point is the optimum (usually on a constraint surface)</li>
+                    </ol>
+
+                    <div class="inline-gallery" id="constraint-surface-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>🗺️ Feasible Region Boundaries:</strong> These diagrams show constraint surfaces that bound the feasible region. The shaded area is feasible (where all constraints are satisfied). Multiple constraints create a feasible region's boundaries. The optimal solution sits on or near the boundary—pushing against the active constraints that limit further improvement.
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>Key Principle:</strong> At the optimum, the objective function contour is <strong>tangent</strong> to the constraint surface. If they weren't tangent, you could move further along the constraint to improve the objective.
+                    </div>
+
+                    <div class="image-gallery" id="constraint-surface-images"></div>
+                </div>
+
+                <!-- Objective Function Section -->
+                <div id="objective-function" class="content-section">
+                    <h2>🎯 The Objective Function</h2>
+                    <p>The objective function is the mathematical expression that quantifies your design goal. It is the "scorecard" by which designs are evaluated and compared.</p>
+
+                    <h3>Definition</h3>
+                    <p><span class="key-term">Objective Function</span> (also called merit function, cost function, or criterion function) is a scalar function f(X) that maps the design vector to a single value representing "goodness" of the design.</p>
+                    <div class="formula-box">
+f(X) = measure of performance/cost/benefit
+    </div>
+
+                    <h3>Common Objective Functions by Industry</h3>
+                    <table>
+                        <tr>
+                            <th>Industry</th>
+                            <th>Typical Objective</th>
+                            <th>Justification</th>
+                        </tr>
+                        <tr>
+                            <td>Civil</td>
+                            <td>Minimize Cost</td>
+                            <td>Large structures are expensive</td>
+                        </tr>
+                        <tr>
+                            <td>Aerospace</td>
+                            <td>Minimize Weight</td>
+                            <td>Every kg requires fuel to lift</td>
+                        </tr>
+                        <tr>
+                            <td>Mechanical</td>
+                            <td>Maximize Efficiency</td>
+                            <td>Energy efficiency = profit</td>
+                        </tr>
+                        <tr>
+                            <td>Manufacturing</td>
+                            <td>Minimize Time</td>
+                            <td>Production rate = throughput</td>
+                        </tr>
+                        <tr>
+                            <td>Structural Dynamics</td>
+                            <td>Maximize Natural Frequency</td>
+                            <td>Avoid resonance with wind/earthquakes</td>
+                        </tr>
+                    </table>
+
+                    <h3>Mathematical Transformations (Preserving Optimality)</h3>
+                    <p>The location of the optimal solution X* remains unchanged under certain transformations:</p>
+                    <div class="formula-box">
+1. Multiplication by positive constant:
+   Minimize c·f(X) has same optimum as Minimize f(X)
+   (where c > 0)
+
+2. Addition of constant:
+   Minimize f(X) + c has same optimum as Minimize f(X)
+
+3. Negation of objective:
+   Maximize f(X) ≡ Minimize -f(X)
+                    </div>
+
+                    <h3>Classification of Objective Functions</h3>
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Form</th>
+                            <th>Algorithm Used</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Linear (LP)</strong></td>
+                            <td>f = c₁x₁ + c₂x₂ + ...</td>
+                            <td>Simplex Method</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Quadratic (QP)</strong></td>
+                            <td>f = Σcᵢxᵢ + ΣΣQᵢⱼxᵢxⱼ</td>
+                            <td>Quadratic Programming</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nonlinear (NLP)</strong></td>
+                            <td>General polynomial, trigonometric, exponential</td>
+                            <td>Gradient-based methods</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Geometric (GMP)</strong></td>
+                            <td>Posynomials: Σcᵢx₁^a₁x₂^a₂...</td>
+                            <td>Geometric Programming</td>
+                        </tr>
+                    </table>
+
+                    <h3>Multi-Objective Functions</h3>
+                    <p>Real problems often have conflicting goals (minimize weight AND maximize strength). These are handled by:</p>
+                    <div class="info-box">
+                        <strong>Method 1: Weighted Sum</strong><br>
+                        f(X) = α₁f₁(X) + α₂f₂(X) + ...<br>
+                        where α weights indicate relative importance
+                    </div>
+
+                    <h3>Example: Cylindrical Tin Design</h3>
+                    <p>Minimize the cost of a cylindrical tin with top and bottom:</p>
+                    <div class="formula-box">
+Material cost = cost_per_unit_area × Surface_area
+f(r,h) = 5·Area_top + 5·Area_bottom + 5·Area_side + 2·Diameter
+f(r,h) = 5πr² + 5πr² + 5(2πrh) + 2d
+f(r,h) = 10πr² + 10πrh + 2d
+
+Constraint: Total material available = 24π
+2πr² + 2πrh = 24π
+                    </div>
+
+                    <h3>Objective Function Visualization</h3>
+                    <p>How objective functions appear across the design space:</p>
+                    <div class="inline-gallery" id="objective-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>📈 Function Landscape:</strong> These images show level curves (contour lines) connecting points with equal objective values. The arrows show the gradient direction—the steepest direction of increase. When minimizing, we move opposite to the gradient. The "bowl" or "valley" shape of convex functions shows why there's a unique global minimum.
+                    </div>
+
+                    <div class="image-gallery" id="objective-images"></div>
+                </div>
+
+                <!-- Objective Function Surfaces Section -->
+                <div id="obj-surfaces" class="content-section">
+                    <h2>🗻 Objective Function Surfaces</h2>
+                    <p>The geometric visualization of how the objective function varies across the design space.</p>
+
+                    <h3>Concept of Surfaces and Contours</h3>
+                    <p>For a function f(x₁, x₂), we can visualize it as a 3D terrain where:</p>
+                    <ul>
+                        <li>x₁ and x₂ are horizontal coordinates (latitude/longitude)</li>
+                        <li>f(x₁, x₂) is the elevation (height)</li>
+                        <li>Contours (level curves) are lines of constant elevation f = C</li>
+                    </ul>
+
+                    <h3>The Gradient Vector (∇f)</h3>
+                    <div class="info-box">
+                        <strong>∇f points in the direction of steepest ascent (uphill)</strong><br>
+                        For minimization, we move in direction of -∇f (downhill)<br>
+                        ∇f is always perpendicular (normal) to the contour lines
+                    </div>
+
+                    <h3>Topography of Objective Surfaces</h3>
+                    <table>
+                        <tr>
+                            <th>Surface Type</th>
+                            <th>Shape</th>
+                            <th>Optimization Impact</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Convex (Bowl-shaped)</strong></td>
+                            <td>Curves upward in all directions</td>
+                            <td>Single global minimum - safe to use simple algorithms</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multimodal (Many peaks/valleys)</strong></td>
+                            <td>Multiple local minima</td>
+                            <td>Risk of getting trapped - need global search methods</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Saddle Point</strong></td>
+                            <td>Curves up in one direction, down in another</td>
+                            <td>Unstable equilibrium - not a true minimum</td>
+                        </tr>
+                    </table>
+
+                    <h3>Interaction with Constraints</h3>
+                    <p>The optimal solution occurs where an objective contour is <strong>tangent</strong> to the feasible region boundary.</p>
+                    <div class="highlight-box">
+                        Imagine rolling a marble through a curved terrain (objective surface). Walls (constraints) prevent it from rolling everywhere. The marble settles where it hits a wall at the steepest point on that wall.
+                    </div>
+
+                    <h3>Example: Cost Surface for Tubular Column</h3>
+                    <p>As diameter (x₁) and thickness (x₂) vary, the cost surface has a hyperbolic shape due to the inverse relationship between material used and cost.</p>
+                    <div class="formula-box">
+f(x₁, x₂) = 9.82·x₁·x₂ + 2·x₁
+
+This creates contours where:
+- Increasing x₁ and decreasing x₂ keeps cost roughly constant
+- Thinner tubes (low x₂) with large diameters have similar costs to thick tubes with small diameters
+                    </div>
+
+                    <h3>Visualizing Objective Surfaces</h3>
+                    <p>Multi-variable objective functions create complex geometric surfaces:</p>
+                    <div class="inline-gallery" id="surfaces-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>🗻 Surface Topology:</strong> For 2-variable problems, the objective function creates a 3D surface. Peaks represent maxima, valleys represent minima. Contour lines project down to show the design space. The gradient (shown as arrows) points uphill; optimal descent moves against the gradient. Saddle points and multiple local optima complicate the search landscape.
+                    </div>
+
+                    <div class="image-gallery" id="surfaces-images"></div>
+                </div>
+
+                <!-- Classification Section -->
+                <div id="classification" class="content-section">
+                    <h2>📋 Classification of Optimization Problems</h2>
+                    <p>Not all optimization problems are the same. Classifying a problem correctly determines which solution method will work.</p>
+
+                    <h3>1. Classification by Constraints</h3>
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Definition</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Unconstrained</strong></td>
+                            <td>Variables are free to take any value</td>
+                            <td>Curve fitting (find best polynomial coefficients)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constrained</strong></td>
+                            <td>Variables must satisfy restrictions</td>
+                            <td>Design problems (stress limits, budget)</td>
+                        </tr>
+                    </table>
+
+                    <h3>2. Classification by Variable Type</h3>
+                    <div class="formula-box">
+Parameter Optimization:
+- Find fixed values x₁*, x₂*, ... for each variable
+- Example: Finding optimal beam thickness
+
+Trajectory Optimization:
+- Find functions x(t) that vary over space/time
+- Example: Finding optimal wing shape as function of position
+                    </div>
+
+                    <h3>3. Classification by Nature of Equations</h3>
+                    <table>
+                        <tr>
+                            <th>Problem Type</th>
+                            <th>Objective</th>
+                            <th>Constraints</th>
+                            <th>Complexity</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Linear Programming (LP)</strong></td>
+                            <td>Linear</td>
+                            <td>Linear</td>
+                            <td>Low - Polynomial time</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Quadratic Programming (QP)</strong></td>
+                            <td>Quadratic</td>
+                            <td>Linear</td>
+                            <td>Moderate</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Geometric Programming (GMP)</strong></td>
+                            <td>Posynomial</td>
+                            <td>Posynomial</td>
+                            <td>Low-Moderate</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nonlinear Programming (NLP)</strong></td>
+                            <td>Nonlinear</td>
+                            <td>Nonlinear</td>
+                            <td>High - No guarantees</td>
+                        </tr>
+                    </table>
+
+                    <h3>4. Classification by Variable Values</h3>
+                    <ul>
+                        <li><strong>Continuous:</strong> Variables can be any real number</li>
+                        <li><strong>Discrete/Integer:</strong> Variables must be integers or specific values</li>
+                        <li><strong>Mixed-Integer:</strong> Some variables continuous, some discrete</li>
+                    </ul>
+
+                    <h3>5. Classification by Data Nature</h3>
+                    <ul>
+                        <li><strong>Deterministic:</strong> All parameters are known constants</li>
+                        <li><strong>Stochastic:</strong> Some parameters are random variables with probability distributions</li>
+                    </ul>
+
+                    <h3>6. Classification by Number of Objectives</h3>
+                    <ul>
+                        <li><strong>Single-Objective:</strong> Optimize one criterion (most classical problems)</li>
+                        <li><strong>Multi-Objective:</strong> Optimize multiple conflicting criteria</li>
+                    </ul>
+
+                    <h3>Problem Type Examples and Characteristics</h3>
+                    <p>Different problem classes require different solution approaches:</p>
+                    <div class="inline-gallery" id="classification-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>🗂️ Classification Impact:</strong> Linear problems (LP) have convex feasible regions and guaranteed global solutions via Simplex. Nonlinear problems (NLP) may have multiple local optima requiring advanced algorithms. Knowing the problem class helps select the most efficient method. Geometric Programming problems have special structure allowing efficient solution despite apparent nonlinearity.
+                    </div>
+
+                    <div class="image-gallery" id="classification-images"></div>
+                </div>
+
+                <!-- Single-Variable Optimization Section -->
+                <div id="single-var" class="content-section">
+                    <h2>📈 Single-Variable Optimization</h2>
+                    <p>Given a continuous function f(x), find the value x* that minimizes (or maximizes) f.</p>
+
+                    <h3>Analytical Methods (Calculus-Based)</h3>
+
+                    <h4>Necessary Condition (Finding Stationary Points)</h4>
+                    <div class="formula-box">
+At a minimum or maximum, the derivative must be zero:
+f'(x*) = 0
+
+Points where f'(x) = 0 are called STATIONARY POINTS
+(could be minimum, maximum, or inflection point)
+                    </div>
+
+                    <h4>Sufficient Condition (Determining the Type)</h4>
+                    <div class="formula-box">
+If f'(x*) = 0, then:
+- If f''(x*) > 0 → x* is a LOCAL MINIMUM (valley)
+- If f''(x*) < 0 → x* is a LOCAL MAXIMUM (peak)
+- If f''(x*) = 0 → Test is inconclusive (check higher derivatives)
+                    </div>
+
+                    <h3>Numerical Methods (When Calculus Fails)</h3>
+
+                    <h4>Elimination Methods</h4>
+                    <p>These methods narrow down the interval containing the minimum by eliminating regions where the minimum cannot be.</p>
+
+                    <table>
+                        <tr>
+                            <th>Method</th>
+                            <th>Concept</th>
+                            <th>Convergence Rate</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Golden Section</strong></td>
+                            <td>Divide interval by golden ratio (0.618), reuse one point each iteration</td>
+                            <td>Linear (most efficient elimination method)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fibonacci</strong></td>
+                            <td>Use Fibonacci sequence to divide interval, optimal if iteration count is fixed</td>
+                            <td>Linear</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dichotomous</strong></td>
+                            <td>Place two points near center, eliminate half each iteration</td>
+                            <td>Linear</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Exhaustive</strong></td>
+                            <td>Evaluate at n equally-spaced points, pick the best</td>
+                            <td>Slow - only use for small problems</td>
+                        </tr>
+                    </table>
+
+                    <h4>Interpolation Methods</h4>
+                    <p>These use the VALUES of f(x) at multiple points to fit a polynomial and estimate the minimum of that polynomial.</p>
+                    <ul>
+                        <li><strong>Quadratic Interpolation:</strong> Fit a parabola, find its minimum, use that as next test point</li>
+                        <li><strong>Cubic Interpolation:</strong> Fit a cubic, faster convergence if derivatives available</li>
+                    </ul>
+
+                    <h4>Gradient-Based Methods</h4>
+                    <p>When the derivative f'(x) can be calculated, these methods are much faster.</p>
+                    <div class="formula-box">
+Newton's Method:
+x_{k+1} = x_k - f'(x_k) / f''(x_k)
+
+Secant Method (when f'' is hard to compute):
+Approximate f''(x) using finite differences of f'
+x_{k+1} = x_k - f'(x_k) · (x_k - x_{k-1}) / (f'(x_k) - f'(x_{k-1}))
+                    </div>
+
+                    <h3>Convergence Comparison</h3>
+                    <table>
+                        <tr>
+                            <th>Method</th>
+                            <th>Convergence Type</th>
+                            <th>Requirements</th>
+                            <th>When to Use</th>
+                        </tr>
+                        <tr>
+                            <td>Elimination</td>
+                            <td>Linear (slow but steady)</td>
+                            <td>Just function values</td>
+                            <td>Non-smooth functions, black-box</td>
+                        </tr>
+                        <tr>
+                            <td>Interpolation</td>
+                            <td>Super-linear (faster)</td>
+                            <td>Function values</td>
+                            <td>Smooth functions, robustness matters</td>
+                        </tr>
+                        <tr>
+                            <td>Newton</td>
+                            <td>Quadratic (very fast)</td>
+                            <td>f'(x) and f''(x)</td>
+                            <td>Good starting point available</td>
+                        </tr>
+                    </table>
+
+                    <div class="success-box">
+                        <strong>Practical Approach:</strong> In real software, these methods are often combined. Start with Golden Section to bracket the minimum reliably, then switch to Newton's method for final polishing.
+                    </div>
+
+                    <h3>Visualizing Stationary Points</h3>
+                    <p>Understanding different types of critical points is essential:</p>
+                    <div class="inline-gallery" id="single-var-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>📊 Critical Point Identification:</strong> Minimum points have zero slope and curve upward (f''(x) > 0). Maximum points have zero slope and curve downward (f''(x) < 0). Inflection points have zero second derivative but aren't optima. Boundary points (endpoints of the domain) must always be checked—the global optimum might occur at a boundary rather than at a critical point.
+                    </div>
+                </div>
+
+                <!-- Necessary & Sufficient Conditions Section -->
+                <div id="necessary-sufficient" class="content-section">
+                    <h2>✅ Necessary and Sufficient Conditions for Optimality</h2>
+                    <p>These conditions form the mathematical foundation for identifying and verifying optimization solutions.</p>
+
+                    <h3>Understanding the Concepts</h3>
+
+                    <div class="info-box">
+                        <strong>Necessary Condition:</strong> A condition that MUST be satisfied IF a solution is optimal. It's a screening test. Passing doesn't guarantee optimality, but failing disqualifies the point.<br><br>
+                        <strong>Sufficient Condition:</strong> A condition that GUARANTEES optimality IF it's satisfied. It's a confirmation test.
+                    </div>
+
+                    <h3>For Single-Variable Functions f(x)</h3>
+
+                    <table>
+                        <tr>
+                            <th>Order</th>
+                            <th>Condition</th>
+                            <th>Type</th>
+                            <th>Implication</th>
+                        </tr>
+                        <tr>
+                            <td>First</td>
+                            <td>f'(x*) = 0</td>
+                            <td>Necessary</td>
+                            <td>If x* is extremum, derivative is zero</td>
+                        </tr>
+                        <tr>
+                            <td>Second (f'' > 0)</td>
+                            <td>f''(x*) > 0</td>
+                            <td>Sufficient for MIN</td>
+                            <td>If f''> 0, then x* is definitely a local minimum</td>
+                        </tr>
+                        <tr>
+                            <td>Second (f'' < 0)</td>
+                            <td>f''(x*) < 0</td>
+                            <td>Sufficient for MAX</td>
+                            <td>If f'' < 0, then x* is definitely a local maximum</td>
+                        </tr>
+                        <tr>
+                            <td>Second (f'' = 0)</td>
+                            <td>f''(x*) = 0</td>
+                            <td>Inconclusive</td>
+                            <td>Must check higher derivatives</td>
+                        </tr>
+                    </table>
+
+                    <h3>For Multivariable Functions f(X)</h3>
+
+                    <h4>The Gradient Vector (∇f)</h4>
+                    <div class="formula-box">
+∇f(X) = [∂f/∂x₁]
+        [∂f/∂x₂]
+        [  ⋮  ]
+        [∂f/∂xₙ]
+
+This vector points in the direction of steepest ascent.
+                    </div>
+
+                    <h4>The Hessian Matrix (J)</h4>
+                    <p>The matrix of all second partial derivatives:</p>
+                    <div class="formula-box">
+J = [∂²f/∂x₁²     ∂²f/∂x₁∂x₂  ...  ]
+    [∂²f/∂x₂∂x₁   ∂²f/∂x₂²    ...  ]
+    [ ⋮             ⋮          ⋱   ]
+
+The Hessian is symmetric (Schwartz's theorem):
+∂²f/∂xᵢ∂xⱼ = ∂²f/∂xⱼ/∂xᵢ
+                    </div>
+
+                    <h4>Necessary and Sufficient Conditions</h4>
+                    <table>
+                        <tr>
+                            <th>Condition</th>
+                            <th>Mathematical Form</th>
+                            <th>Implication</th>
+                        </tr>
+                        <tr>
+                            <td><strong>First Order (Necessary)</strong></td>
+                            <td>∇f(X*) = 0</td>
+                            <td>If X* is extremum, gradient = 0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Second Order (Sufficient for MIN)</strong></td>
+                            <td>H is Positive Definite</td>
+                            <td>X* is definitely a local minimum</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Second Order (Sufficient for MAX)</strong></td>
+                            <td>H is Negative Definite</td>
+                            <td>X* is definitely a local maximum</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Second Order (Indefinite)</strong></td>
+                            <td>H is Indefinite</td>
+                            <td>X* is a Saddle Point (NOT an extremum)</td>
+                        </tr>
+                    </table>
+
+                    <h3>Testing for Matrix Definiteness</h3>
+
+                    <h4>Method 1: Eigenvalues</h4>
+                    <ul>
+                        <li>If all eigenvalues λᵢ > 0 → Positive Definite</li>
+                        <li>If all eigenvalues λᵢ < 0 → Negative Definite</li>
+                        <li>If mix of positive and negative → Indefinite</li>
+                    </ul>
+
+                    <h4>Method 2: Principal Minor Test (Sylvester's Criterion)</h4>
+                    <div class="info-box">
+<strong>Positive Definite:</strong> All principal minors (determinants of upper-left submatrices) are positive<br>
+[a₁₁] > 0, [a₁₁ a₁₂; a₂₁ a₂₂] > 0, ..., det(H) > 0<br><br>
+
+<strong>Negative Definite:</strong> Principal minors alternate in sign, starting negative<br>
+[a₁₁] < 0, [a₁₁ a₁₂; a₂₁ a₂₂] > 0, ..., alternating signs
+                    </div>
+
+                    <h3>Example: Analyzing a Multivariable Function</h3>
+                    <p>Given: f(x₁, x₂) = x₁³ + x₂³ + 2x₁² + 4x₂² + 6</p>
+                    <div class="tabs">
+                        <button class="tab-button active" onclick="switchTab(event, 'tab1')">Step 1: First-Order</button>
+                        <button class="tab-button" onclick="switchTab(event, 'tab2')">Step 2: Find Points</button>
+                        <button class="tab-button" onclick="switchTab(event, 'tab3')">Step 3: Second-Order</button>
+                        <button class="tab-button" onclick="switchTab(event, 'tab4')">Step 4: Classify</button>
+                    </div>
+
+                    <div id="tab1" class="tab-content active">
+                        <p><strong>Find Gradient:</strong></p>
+                        <div class="formula-box">
+∂f/∂x₁ = 3x₁² + 4x₁ = x₁(3x₁ + 4)
+∂f/∂x₂ = 3x₂² + 8x₂ = x₂(3x₂ + 8)
+
+Setting each to zero:
+x₁ = 0  or  x₁ = -4/3
+x₂ = 0  or  x₂ = -8/3
+                        </div>
+                    </div>
+
+                    <div id="tab2" class="tab-content">
+                        <p><strong>Stationary Points:</strong></p>
+                        <div class="formula-box">
+(0, 0)
+(0, -8/3)
+(-4/3, 0)
+(-4/3, -8/3)
+
+Four candidates to test!
+                        </div>
+                    </div>
+
+                    <div id="tab3" class="tab-content">
+                        <p><strong>Hessian Matrix:</strong></p>
+                        <div class="formula-box">
+∂²f/∂x₁² = 6x₁ + 4
+∂²f/∂x₂² = 6x₂ + 8
+∂²f/∂x₁∂x₂ = 0
+
+H = [6x₁ + 4    0   ]
+    [  0    6x₂ + 8]
+
+(Diagonal matrix - easy to check!)
+                        </div>
+                    </div>
+
+                    <div id="tab4" class="tab-content">
+                        <p><strong>Evaluate H at Each Point:</strong></p>
+                        <div class="formula-box">
+At (0, 0): H = [4  0; 0  8] → All positive → MINIMUM
+At (0, -8/3): H = [4  0; 0  -8] → Mixed signs → SADDLE
+At (-4/3, 0): H = [-4  0; 0  8] → Mixed signs → SADDLE
+At (-4/3, -8/3): H = [-4  0; 0  -8] → All negative → MAXIMUM
+                        </div>
+                    </div>
+
+                    <script>
+                        function switchTab(evt, tabName) {
+                            var i, tabcontent, tabbuttons;
+                            tabcontent = document.getElementsByClassName("tab-content");
+                            for (i = 0; i < tabcontent.length; i++) {
+                                tabcontent[i].classList.remove("active");
+                            }
+                            tabbuttons = document.getElementsByClassName("tab-button");
+                            for (i = 0; i < tabbuttons.length; i++) {
+                                tabbuttons[i].classList.remove("active");
+                            }
+                            document.getElementById(tabName).classList.add("active");
+                            evt.currentTarget.classList.add("active");
+                        }
+                    </script>
+
+                    <h3>Hessian Matrix Test Examples</h3>
+                    <p>The Hessian matrix determines the nature of critical points:</p>
+                    <div class="inline-gallery" id="necessary-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>🔬 Hessian Interpretation:</strong> The Hessian is the matrix of second partial derivatives. Positive definite Hessian (all eigenvalues > 0) confirms a local minimum. Negative definite (all eigenvalues < 0) confirms maximum. Mixed-sign eigenvalues indicate a saddle point. The shape of the function surface (bowl-shaped for minimum, inverted bowl for maximum, saddle-shaped for saddle point) matches the Hessian eigenvalues.
+                    </div>
+
+                    <div class="image-gallery" id="necessary-images"></div>
+                </div>
+
+                <!-- Multivariable Unconstrained Section -->
+                <div id="multivariable-unc" class="content-section">
+                    <h2>🔢 Multivariable Optimization Without Constraints</h2>
+                    <p>When design variables are free to move in any direction (no physical limits), we have the cleanest optimization problem.</p>
+
+                    <h3>The Problem</h3>
+                    <div class="formula-box">
+Find X* = {x₁*, x₂*, ..., xₙ*}ᵀ which minimizes f(X)
+(No constraints, no limits)
+                    </div>
+
+                    <h3>Solution Process</h3>
+                    <ol>
+                        <li><strong>Necessary Condition:</strong> Set ∇f(X*) = 0 and solve for X*</li>
+                        <li><strong>Sufficient Condition:</strong> Check the Hessian matrix H at X* to confirm it's a minimum</li>
+                    </ol>
+
+                    <h3>The Role of the Hessian</h3>
+                    <p>The Hessian matrix tells us the <strong>local curvature</strong> of the function:</p>
+                    <ul>
+                        <li><strong>Positive Definite (all eigenvalues > 0):</strong> Bowl-shaped → Local minimum ✓</li>
+                        <li><strong>Negative Definite (all eigenvalues < 0):</strong> Dome-shaped → Local maximum ✗ (for minimization)</li>
+                        <li><strong>Indefinite (mixed eigenvalues):</strong> Saddle-shaped → Saddle point ✗ (not an extremum)</li>
+                    </ul>
+
+                    <h3>Unconstrained vs. Constrained</h3>
+                    <div class="highlight-box">
+The optimal solution in unconstrained problems often lies in the <strong>interior</strong> of the search domain (far from boundaries), because there are no boundaries!
+
+In constrained problems, the optimum usually lies ON a constraint boundary.
+
+This fundamental difference requires different algorithmic approaches.
+                    </div>
+
+                    <h3>Practical Algorithms for Multivariable Unconstrained</h3>
+
+                    <h4>Gradient Descent (Steepest Descent)</h4>
+                    <div class="formula-box">
+Algorithm:
+1. Start with initial guess X₀
+2. Calculate gradient ∇f(X_k)
+3. Move in opposite direction (downhill): X_{k+1} = X_k - α·∇f(X_k)
+4. Choose step size α carefully (too large → overshoot, too small → slow)
+5. Repeat until convergence (∇f ≈ 0)
+
+Advantage: Simple, requires only first derivatives
+Disadvantage: Can be slow (zig-zagging near optimum)
+                    </div>
+
+                    <h4>Newton's Method (for multivariable)</h4>
+                    <div class="formula-box">
+Algorithm:
+X_{k+1} = X_k - H⁻¹·∇f(X_k)
+
+where H is the Hessian matrix and H⁻¹ is its inverse
+
+Advantage: Quadratic convergence (very fast)
+Disadvantage: Requires computing and inverting Hessian (expensive for large problems)
+                    </div>
+
+                    <h3>Real Engineering Example</h3>
+                    <p><strong>Spring-Mass System:</strong> Find equilibrium position by minimizing potential energy</p>
+                    <ul>
+                        <li><strong>Variables:</strong> Positions of two masses (x₁, x₂)</li>
+                        <li><strong>Objective:</strong> Minimize total potential energy U(x₁, x₂)</li>
+                        <li><strong>Physics:</strong> At equilibrium, ∂U/∂xᵢ = 0 (force balance)</li>
+                        <li><strong>Stability:</strong> Check Hessian to confirm stable equilibrium (not unstable)</li>
+                    </ul>
+
+                    <div class="success-box">
+                        <strong>Unconstrained optimization is the foundation:</strong> Many constrained methods work by converting the problem to unconstrained form using penalties or Lagrange multipliers!
+                    </div>
+
+                    <h3>Visual Illustrations</h3>
+                    <div id="multivariable-unc-images"></div>
+                </div>
+
+                <!-- Multivariable with Equality Constraints Section -->
+                <div id="multivariable-eq" class="content-section">
+                    <h2>⚖️ Multivariable Optimization with Equality Constraints</h2>
+                    <p>When design variables are related by exact equations (like conservation laws or geometric relationships).</p>
+
+                    <h3>The Problem</h3>
+                    <div class="formula-box">
+Minimize: f(X)
+Subject to: hⱼ(X) = 0,  j = 1, 2, ..., m
+(m equality constraints, usually m < n)
+                    </div>
+
+                    <h3>Key Insight: Degrees of Freedom</h3>
+                    <ul>
+                        <li>n variables total</li>
+                        <li>m constraints (each removes one degree of freedom)</li>
+                        <li>Results in (n - m) independent variables</li>
+                    </ul>
+
+                    <p>If n = m, the problem is fully determined (likely no optimization to do). If n < m, the problem is over-constrained (no solution).</p>
+
+                    <h3>Three Solution Methods</h3>
+
+                    <h4>Method 1: Direct Substitution</h4>
+                    <p><strong>Idea:</strong> Solve constraints for m variables, substitute into objective to eliminate constraints</p>
+                    <div class="formula-box">
+Problem: Minimize f(x₁, x₂) subject to x₁² + x₂² = 1
+
+Solution: Substitute x₂ = √(1 - x₁²) into f
+Result: Minimize f(x₁, √(1 - x₁²)) with respect to x₁ only
+(Now it's unconstrained in one variable!)
+                    </div>
+                    <p><strong>Pros:</strong> Straightforward conceptually
+                    <strong>Cons:</strong> Often algebraically messy or impossible for nonlinear constraints</p>
+
+                    <h4>Method 2: Constrained Variation</h4>
+                    <p><strong>Idea:</strong> Use Jacobian determinants to ensure movements stay on the constraint surface</p>
+                    <p><strong>Pros:</strong> Geometric insight
+                    <strong>Cons:</strong> Computationally heavy for large problems</p>
+
+                    <h4>Method 3: Lagrange Multipliers (MOST COMMON)</h4>
+                    <p><strong>Idea:</strong> Introduce auxiliary variables (multipliers) to incorporate constraints into objective</p>
+
+                    <h3>Visual Illustrations</h3>
+                    <div id="multivariable-eq-images"></div>
+                </div>
+
+                <!-- Lagrange Multipliers Section -->
+                <div id="lagrange" class="content-section">
+                    <h2>🔗 Method of Lagrange Multipliers</h2>
+                    <p>The most powerful and elegant method for handling equality constraints in optimization.</p>
+
+                    <h3>Core Idea</h3>
+                    <p>Instead of enforcing constraints directly, we "absorb" them into the objective function using penalty multipliers. At optimality, the gradient of the (unconstrained) modified function is zero.</p>
+
+                    <h3>The Lagrange Function</h3>
+                    <div class="formula-box">
+L(X, λ) = f(X) + Σ λⱼ·hⱼ(X)
+
+where:
+- f(X) is the original objective
+- hⱼ(X) are the constraints  
+- λⱼ are Lagrange multipliers (one per constraint)
+
+The multipliers are "prices" - how much we're willing to "pay" to violate each constraint.
+                    </div>
+
+                    <h3>Necessary Conditions for Optimality</h3>
+                    <p>At the optimum, the gradient of L with respect to ALL variables must be zero:</p>
+                    <div class="formula-box">
+∂L/∂xᵢ = ∂f/∂xᵢ + Σ λⱼ·(∂hⱼ/∂xᵢ) = 0,  i = 1, ..., n
+∂L/∂λⱼ = hⱼ(X) = 0,  j = 1, ..., m
+
+This gives (n + m) equations for (n + m) unknowns
+                    </div>
+
+                    <h3>Geometric Interpretation</h3>
+                    <div class="highlight-box">
+At optimality: -∇f = Σ λⱼ·∇hⱼ
+
+This means the negative gradient of the objective (direction of steepest descent) is a linear combination of the constraint gradients (normals to the constraint surfaces).
+
+Physically: The objective function contour is TANGENT to the constraint surface at the optimum.
+                    </div>
+
+                    <h3>Physical Meaning of λ (Shadow Prices)</h3>
+                    <p>The Lagrange multiplier λⱼ* represents:</p>
+                    <div class="info-box">
+<strong>λⱼ* = ∂f*/∂b_j</strong><br><br>
+The rate of change of the optimal objective value f* with respect to the constraint right-hand side bⱼ.
+
+Example: If a constraint is "Available Material = 100 kg" and λ* = 5, then relaxing it to 101 kg would improve the objective by approximately 5 units.
+                    </div>
+
+                    <h3>Solving the System</h3>
+                    <ol>
+                        <li>Construct L = f(X) + Σ λⱼ·hⱼ(X)</li>
+                        <li>Take partial derivatives: ∂L/∂xᵢ and ∂L/∂λⱼ</li>
+                        <li>Set all derivatives to zero</li>
+                        <li>Solve the resulting (n + m) nonlinear equations for X* and λ*</li>
+                        <li>Check sufficiency using the bordered Hessian (advanced)</li>
+                    </ol>
+
+                    <h3>Example: Minimize f(x₁, x₂) = x₁² + x₂² subject to x₁ + x₂ = 1</h3>
+                    <div class="tabs">
+                        <button class="tab-button active" onclick="switchTab(event, 'lag1')">Setup</button>
+                        <button class="tab-button" onclick="switchTab(event, 'lag2')">Differentiate</button>
+                        <button class="tab-button" onclick="switchTab(event, 'lag3')">Solve</button>
+                        <button class="tab-button" onclick="switchTab(event, 'lag4')">Interpret</button>
+                    </div>
+
+                    <div id="lag1" class="tab-content active">
+                        <p><strong>Step 1: Construct Lagrangian</strong></p>
+                        <div class="formula-box">
+h(x₁, x₂) = x₁ + x₂ - 1 = 0
+
+L(x₁, x₂, λ) = x₁² + x₂² + λ(x₁ + x₂ - 1)
+                        </div>
+                    </div>
+
+                    <div id="lag2" class="tab-content">
+                        <p><strong>Step 2: Differentiate</strong></p>
+                        <div class="formula-box">
+∂L/∂x₁ = 2x₁ + λ = 0
+∂L/∂x₂ = 2x₂ + λ = 0
+∂L/∂λ = x₁ + x₂ - 1 = 0
+
+Three equations, three unknowns
+                        </div>
+                    </div>
+
+                    <div id="lag3" class="tab-content">
+                        <p><strong>Step 3: Solve</strong></p>
+                        <div class="formula-box">
+From first two: 2x₁ + λ = 0 and 2x₂ + λ = 0
+This implies: 2x₁ = 2x₂, so x₁ = x₂
+
+From constraint: x₁ + x₂ = 1
+Substituting: 2x₁ = 1, so x₁ = x₂ = 0.5
+
+From first equation: λ = -2x₁ = -1
+
+Solution: x₁* = 0.5, x₂* = 0.5, λ* = -1
+Optimal value: f* = 0.5² + 0.5² = 0.5
+                        </div>
+                    </div>
+
+                    <div id="lag4" class="tab-content">
+                        <p><strong>Step 4: Interpret</strong></p>
+                        <div class="formula-box">
+λ* = -1 means:
+- If we relax the constraint from x₁ + x₂ = 1 to x₁ + x₂ = 1.01
+- The optimal value would decrease by approximately 0.01
+
+This makes sense: relaxing the constraint allows the optimum to approach (0, 0) closer, reducing the sum of squares.
+                        </div>
+                    </div>
+
+                    <h3>Key Theorems</h3>
+                    <div class="success-box">
+<strong>Theorem 1 (Necessary Conditions):</strong> If X* is a local minimum, it must satisfy the Lagrange conditions.
+
+<strong>Theorem 2 (Sufficient for Convex Problems):</strong> If f and h are convex (or linear), the Lagrange conditions are sufficient for a global minimum.
+                    </div>
+
+                    <h3>Geometric Interpretation</h3>
+                    <p>The Lagrange multiplier method has a clear geometric meaning:</p>
+                    <div class="inline-gallery" id="lagrange-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>📐 Lagrange Geometry:</strong> At the constrained optimum, the objective function gradient ∇f is parallel to the constraint gradient ∇h. This means the level curve of f is tangent to the constraint curve—they have the same normal direction. The multiplier λ represents the rate of change of the optimal objective value with respect to constraint relaxation (shadow price). If λ = -1, relaxing the constraint by 1 unit improves the objective by 1 unit.
+                    </div>
+
+                    <div class="image-gallery" id="lagrange-images"></div>
+                </div>
+
+                <!-- Multivariable with Inequality Constraints Section -->
+                <div id="multivariable-ineq" class="content-section">
+                    <h2>⛔ Multivariable Optimization with Inequality Constraints</h2>
+                    <p>The most realistic engineering problems have BOTH equality and inequality constraints. We focus on inequalities here.</p>
+
+                    <h3>The Problem</h3>
+                    <div class="formula-box">
+Minimize: f(X)
+Subject to: gⱼ(X) ≤ 0,  j = 1, 2, ..., m
+            (These are the REALISTIC constraints - not exact requirements, but limits)
+                    </div>
+
+                    <h3>Key Concepts</h3>
+
+                    <h4>Active vs. Inactive Constraints</h4>
+                    <p>At the optimum X*:</p>
+                    <ul>
+                        <li><strong>Active:</strong> gⱼ(X*) = 0 (exactly on the limit)</li>
+                        <li><strong>Inactive:</strong> gⱼ(X*) < 0 (safely inside the limit)</li>
+                    </ul>
+
+                    <p>For inactive constraints, we can ignore them locally (they don't affect the immediate search direction). For active constraints, they are like equality constraints - they control movement.</p>
+
+                    <h4>Complementary Slackness</h4>
+                    <p>Either a constraint is active OR its multiplier is zero (but not both in certain cases):</p>
+                    <div class="formula-box">
+λⱼ · gⱼ(X) = 0  for all j
+
+Interpretation:
+- If λⱼ > 0, then gⱼ(X) = 0 (constraint is active)
+- If gⱼ(X) < 0, then λⱼ = 0 (constraint is inactive)
+                    </div>
+
+                    <h3>The Slack Variable Transformation</h3>
+                    <p>To convert inequalities to equalities (enabling Lagrange multipliers), we introduce slack variables:</p>
+                    <div class="formula-box">
+Original: gⱼ(X) ≤ 0
+Modified: gⱼ(X) + yⱼ² = 0
+
+where yⱼ² represents "slack" (must be ≥ 0, so it's squared)
+
+If yⱼ = 0, then gⱼ(X) = 0 (constraint is active)
+If yⱼ ≠ 0, then gⱼ(X) < 0 (constraint is inactive)
+                    </div>
+
+                    <h3>Geometric Intuition</h3>
+                    <p>Visualizing how constraints affect optimization:</p>
+                    <div class="inline-gallery" id="multivariable-ineq-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>🗺️ Feasible Region Geometry:</strong> Inequality constraints define a feasible region (shaded area). Active constraints (g = 0) form the boundary; inactive constraints (g < 0) are satisfied with slack. The optimal solution usually sits where multiple constraints meet (are active simultaneously). Active constraints are the bottlenecks—they limit further improvement. Inactive constraints don't affect the optimal value.
+                    </div>
+
+                    <div class="highlight-box">
+Think of the inequality constraints as defining a "feasible region" (like a city) bounded by constraint surfaces (like city walls).
+
+Your objective function creates a landscape (like a terrain). You want to reach the lowest point in the city.
+
+If the lowest terrain point is OUTSIDE the city walls, the optimum is where an objective contour is TANGENT to a city wall (at least one active constraint).
+
+If the lowest terrain point is INSIDE the city, that's where you want to go (no constraints matter).
+                    </div>
+
+                    <div id="multivariable-ineq-images"></div>
+                </div>
+
+                <!-- Kuhn-Tucker Conditions Section -->
+                <div id="kuhn-tucker" class="content-section">
+                    <h2>🎯 The Kuhn-Tucker (K-T) Conditions</h2>
+                    <p>The foundation of modern nonlinear programming. These conditions unify optimization with inequality constraints.</p>
+
+                    <h3>Historical Context</h3>
+                    <p>Developed by Kuhn and Tucker (1951) as a generalization of Lagrange multipliers to handle inequalities. Essential for both theoretical analysis and practical algorithms.</p>
+
+                    <h3>The Four K-T Conditions</h3>
+                    <div class="formula-box">
+For the problem: Minimize f(X) subject to gⱼ(X) ≤ 0
+
+At a point X* to be optimal, it must satisfy:
+
+1. STATIONARITY (Gradient Balance):
+   ∇f(X*) + Σ λⱼ∇gⱼ(X*) = 0
+
+2. PRIMAL FEASIBILITY (Constraints Satisfied):
+   gⱼ(X*) ≤ 0 for all j
+
+3. COMPLEMENTARY SLACKNESS (The Switch):
+   λⱼ · gⱼ(X*) = 0 for all j
+
+4. DUAL FEASIBILITY (Multiplier Signs):
+   λⱼ ≥ 0 for all j (for minimization with ≤ constraints)
+                    </div>
+
+                    <h3>Interpreting Each Condition</h3>
+
+                    <h4>1. Stationarity</h4>
+                    <p>The negative gradient of the objective must be a weighted sum of constraint gradients:</p>
+                    <div class="info-box">
+-∇f = Σ λⱼ∇gⱼ
+
+If no constraints are active (all λ = 0), this reduces to ∇f = 0 (standard unconstrained optimality).
+
+If constraints are active, -∇f points "into" the feasible region (weighted by constraint importance λⱼ).
+                    </div>
+
+                    <h4>2. Primal Feasibility</h4>
+                    <p>Simple: The solution must obey all constraints. No point in finding an "optimal" infeasible design.</p>
+
+                    <h4>3. Complementary Slackness</h4>
+                    <p>The "switching" condition that ties multipliers to active constraints:</p>
+                    <div class="highlight-box">
+Think of a spring with a natural length. Either:
+(a) The spring is taut (λ > 0) and stretched exactly to length 0 (g = 0), OR
+(b) The spring is slack (g < 0), so there's no tension (λ = 0)
+
+Both being nonzero simultaneously would mean a slack spring is exerting tension - impossible!
+                    </div>
+
+                    <h4>4. Dual Feasibility</h4>
+                    <p>Multipliers must be non-negative for ≤ constraints in a minimization problem:</p>
+                    <div class="info-box">
+The "force" from constraints must push INTO the feasible region (the direction of -g).
+
+Negative λ would mean constraints are pulling the solution OUT of the feasible region - violating optimality.
+                    </div>
+
+                    <h3>Solving a Problem with K-T Conditions</h3>
+
+                    <p><strong>Step 1:</strong> Form the Lagrangian: L = f(X) + Σ λⱼgⱼ(X)</p>
+                    <p><strong>Step 2:</strong> Write K-T equations (stationarity + complementarity)</p>
+                    <p><strong>Step 3:</strong> Since you don't know which constraints are active, try all 2^m cases:
+                        <ul>
+                            <li>Case 1: No constraints active (λ₁ = λ₂ = ... = 0)</li>
+                            <li>Case 2: g₁ active (λ₁ > 0, g₁ = 0), others inactive (λ₂ = λ₃ = ... = 0)</li>
+                            <li>... and so on</li>
+                        </ul>
+                    </p>
+                    <p><strong>Step 4:</strong> For each case, solve the equations and check if all λ ≥ 0. Valid solutions satisfy K-T.</p>
+
+                    <h3>Example: Constrained Minimization</h3>
+                    <p>Minimize f(x₁, x₂) = (x₁ - 1)² + x₂²
+                    <p>Subject to:</p>
+                    <ul>
+                        <li>g₁: 2x₁ + x₂ ≤ 6</li>
+                        <li>g₂: x₁ - 4x₂ ≤ 0</li>
+                        <li>x₁ ≥ 0, x₂ ≥ 0</li>
+                    </ul>
+
+                    <div class="info-box">
+<strong>Case Testing:</strong><br>
+If we test no active constraints: (1, 0) satisfies the first constraint (2+0 = 2 ≤ 6), BUT VIOLATES the second (1 - 0 = 1 > 0).<br><br>
+So g₂ must be active. Setting g₂ = 0: x₁ = 4x₂<br><br>
+Substituting into f and optimizing with this constraint as an equality gives the answer.
+                    </div>
+
+                    <h3>Constraint Qualification</h3>
+                    <p>K-T conditions are necessary ONLY if <span class="key-term">Constraint Qualification</span> holds:</p>
+                    <ul>
+                        <li>The gradients of active constraints must be linearly independent</li>
+                        <li>OR Slater's condition: There exists a point strictly inside all inequality constraints</li>
+                    </ul>
+
+                    <h3>When K-T is Sufficient (Guaranteed Optimality)</h3>
+                    <div class="success-box">
+For CONVEX PROGRAMMING problems:
+- Objective f is convex
+- All constraints gⱼ are convex
+- Equality constraints (if any) are linear
+
+The K-T conditions are NECESSARY AND SUFFICIENT for a GLOBAL minimum!
+                    </div>
+
+                    <h3>Applications in Engineering</h3>
+                    <ul>
+                        <li><strong>Structural Design:</strong> Minimize weight subject to stress limits, deflection limits</li>
+                        <li><strong>Circuit Design:</strong> Minimize power subject to timing constraints</li>
+                        <li><strong>Portfolio Optimization:</strong> Maximize return subject to risk constraints</li>
+                        <li><strong>Process Control:</strong> Optimize production subject to safety/environmental constraints</li>
+                    </ul>
+
+                    <h3>K-T Conditions in Geometry</h3>
+                    <p>How the K-T conditions appear geometrically at the optimal point:</p>
+                    <div class="inline-gallery" id="kuhn-tucker-images-gallery"></div>
+
+                    <div class="image-explanation">
+                        <strong>⚡ K-T Geometry:</strong> At the optimum, the objective gradient ∇f must be "balanced" by a combination of active constraint gradients ∇gⱼ. This is visualized as vectors: the ∇f vector points toward worse solutions; active constraint gradients point outward from feasible region. At optimality, ∇f is a weighted sum of active constraint gradients pointing inward. The weights (multipliers μⱼ ≥ 0) show each constraint's importance. Inactive constraints have multiplier = 0 (don't contribute).
+                    </div>
+
+                    <div id="kuhn-tucker-images"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Engineering Optimization Study Guide | Based on "Engineering Optimization: Theory and Practice" by Singiresu S. Rao</p>
+        <p>For educational purposes | Chapter references available in sidebar</p>
+    </div>
+
+    <div class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active from sidebar items
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active to clicked sidebar item
+            event.target.classList.add('active');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function searchContent() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (!searchTerm) {
+                alert('Please enter a search term');
+                return;
+            }
+
+            const sections = document.querySelectorAll('.content-section');
+            let found = false;
+
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    if (!found) {
+                        section.classList.add('active');
+                        document.querySelectorAll('.content-section').forEach(s => {
+                            if (s !== section) s.classList.remove('active');
+                        });
+                        found = true;
+                        window.scrollTo(0, 0);
+                    }
+                }
+            });
+
+            if (!found) {
+                alert('Search term not found. Try different keywords.');
+            }
+        }
+
+        window.addEventListener('scroll', function() {
+            const backToTop = document.getElementById('backToTop');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Image mappings for each section
+        const imageMap = {
+            'intro-images': [],
+            'statement-images': ['images/image_point-0_0.png', 'images/image_point-0_1.png', 'images/image_point-0_2.png'],
+            'statement-images-gallery': ['images/image_point-0_0.png', 'images/image_point-0_1.png', 'images/image_point-0_2.png'],
+            'design-vector-images': ['images/image_point-1_0.png', 'images/image_point-1_1.png'],
+            'design-vector-images-gallery': ['images/image_point-1_0.png', 'images/image_point-1_1.png'],
+            'constraints-images': ['images/image_point-2_0.png'],
+            'constraints-images-gallery': ['images/image_point-2_0.png'],
+            'constraint-surface-images': ['images/image_point-2_0.png'],
+            'constraint-surface-images-gallery': ['images/image_point-2_0.png'],
+            'objective-images': ['images/image_point-4_0.png', 'images/image_point-4_1.png'],
+            'objective-images-gallery': ['images/image_point-4_0.png', 'images/image_point-4_1.png'],
+            'surfaces-images': ['images/image_point-5_0.png', 'images/image_point-5_1.png', 'images/image_point-5_2.png'],
+            'surfaces-images-gallery': ['images/image_point-5_0.png', 'images/image_point-5_1.png', 'images/image_point-5_2.png'],
+            'classification-images': ['images/image_point-6_0.png', 'images/image_point-6_1.png', 'images/image_point-6_2.png'],
+            'classification-images-gallery': ['images/image_point-6_0.png', 'images/image_point-6_1.png', 'images/image_point-6_2.png'],
+            'single-var-images': ['images/image_point-7_0.png', 'images/image_point-7_1.png', 'images/image_point-7_2.png'],
+            'single-var-images-gallery': ['images/image_point-7_0.png', 'images/image_point-7_1.png', 'images/image_point-7_2.png'],
+            'multivariable-unc-images': ['images/image_point-8_0.png', 'images/image_point-8_1.png'],
+            'multivariable-unc-images-gallery': ['images/image_point-8_0.png', 'images/image_point-8_1.png'],
+            'necessary-images': ['images/image_point-9_0.png', 'images/image_point-9_1.png'],
+            'necessary-images-gallery': ['images/image_point-9_0.png', 'images/image_point-9_1.png'],
+            'multivariable-eq-images': [],
+            'lagrange-images': ['images/image_point-11_0.png', 'images/image_point-11_1.png'],
+            'lagrange-images-gallery': ['images/image_point-11_0.png', 'images/image_point-11_1.png'],
+            'multivariable-ineq-images': ['images/image_point-12_0.png', 'images/image_point-12_1.png', 'images/image_point-12_2.png'],
+            'multivariable-ineq-images-gallery': ['images/image_point-12_0.png', 'images/image_point-12_1.png', 'images/image_point-12_2.png'],
+            'kuhn-tucker-images': ['images/image_point-13_0.png', 'images/image_point-13_1.png'],
+            'kuhn-tucker-images-gallery': ['images/image_point-13_0.png', 'images/image_point-13_1.png']
+        };
+
+        // Load images from the images folder
+        function loadImages(containerId, imageList) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            if (!imageList || imageList.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '<div class="inline-gallery">';
+            imageList.forEach((imagePath, index) => {
+                html += `
+                    <div class="inline-gallery-item">
+                        <img src="${imagePath}" alt="Illustration ${index + 1}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22250%22%3E%3Crect fill=%22%23f0f0f0%22 width=%22300%22 height=%22250%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2218%22 fill=%22%23999%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EImage: ${imagePath.split('/').pop()}%3C/text%3E%3C/svg%3E'">
+                        <p>Figure ${index + 1}</p>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Load all image galleries
+        window.addEventListener('DOMContentLoaded', function() {
+            Object.keys(imageMap).forEach(containerId => {
+                loadImages(containerId, imageMap[containerId]);
+            });
+        });
+    </script>
+</body>
+</html>
